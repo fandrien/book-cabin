@@ -1,6 +1,6 @@
 # Book Cabin
 
-A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, ing, and caching.
+A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, sorting, and caching.
 
 ## Features
 
