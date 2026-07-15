@@ -164,8 +164,8 @@ POST /search
 | ---------------- | ------------------- |
 | origin           | Origin airport      |
 | destination      | Destination airport |
-| departure_date   | Departure date      |
-| return_date      | Return date         |
+| departureDate   | Departure date      |
+| returnDate      | Return date         |
 | airline          | Filter by airline   |
 | price            | Price               |
 | duration         | Flight Duration     |
@@ -174,7 +174,7 @@ POST /search
 
 ---
 
-# Soring
+# Sorting
 
 Supported sorting fields
 
