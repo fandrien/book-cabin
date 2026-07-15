@@ -31,6 +31,19 @@ func ValidateSearchRequest(req model.SearchRequest) error {
 
 	}
 
+	if req.ReturnDate != nil && strings.TrimSpace(*req.ReturnDate) != "" {
+		returnDate, err := time.Parse("2006-01-02", *req.ReturnDate)
+		if err != nil {
+			return errors.New("invalid return date format, expected yyyy-mm-dd")
+
+		}
+
+		if !departureDate.Before(returnDate) {
+			return errors.New("departure date must be before return date")
+
+		}
+	}
+
 	if strings.TrimSpace(req.ArrivalDate) != "" {
 		arrivalDate, err := time.Parse("2006-01-02", req.ArrivalDate)
 		if err != nil {

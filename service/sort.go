@@ -72,9 +72,13 @@ func sortFlights(
 				flights[j].Arrival.Timestamp
 
 		default:
-
-			return bestValueScore(flights[i]) <
-				bestValueScore(flights[j])
+			if desc {
+				return bestValueScore(flights[i]) >
+					bestValueScore(flights[j])
+			} else {
+				return bestValueScore(flights[i]) <
+					bestValueScore(flights[j])
+			}
 		}
 
 	})
