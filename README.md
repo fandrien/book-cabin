@@ -191,17 +191,19 @@ Supported order
 
 ---
 
-# Best Value Algorithm
+## Best Value Algorithm
 
 If no sorting option is specified, flights are ranked using a custom Best Value algorithm.
 
-The score considers:
+The score combines:
 
-* Direct flights are preferred
-* Lower ticket prices
-* Shorter total travel duration (including layovers)
+- Ticket price (lower is better)
+- Total travel duration (shorter is better)
+- Number of stops (fewer stops are strongly preferred)
 
-This provides a balance between affordability and convenience.
+Flights with fewer stops receive a significant advantage, making direct flights rank higher whenever possible.
+
+The flight with the lowest score is considered the best value.
 
 ---
 
