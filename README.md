@@ -174,7 +174,7 @@ POST /search
 
 ---
 
-# ing
+# Soring
 
 Supported sorting fields
 
