@@ -11,7 +11,7 @@ A Go-based flight search aggregator that collects flight data concurrently from 
 * Aggregation layer
 * In-memory cache
 * Filtering
-* ing
+* Sorting
 * Best Value ranking algorithm
 * Request validation
 * Partial failure handling
@@ -95,7 +95,7 @@ book-cabin/
                           Unified Flight Model
                                   │
                                   ▼
-                     Filtering → ing → Response
+                     Filtering → Sorting → Response
 ```
 
 ---
