@@ -1,6 +1,6 @@
 # Book Cabin
 
-A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, sorting, and caching.
+A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, sorting and caching.
 
 ## Features
 
@@ -149,7 +149,7 @@ POST /search
 {
   "origin": "CGK",
   "destination": "DPS",
-  "departure_date": "2025-12-15",
+  "departureDate": "2025-12-15",
   "returnDate": "2025-12-18",
   "sort_by": "best",
   "sort_order": "asc"
@@ -176,7 +176,7 @@ POST /search
 
 # ing
 
-Supported ing fields
+Supported sorting fields
 
 * best (default)
 * price
@@ -193,7 +193,7 @@ Supported order
 
 # Best Value Algorithm
 
-If no ing option is specified, flights are ranked using a custom Best Value algorithm.
+If no sorting option is specified, flights are ranked using a custom Best Value algorithm.
 
 The score considers:
 
