@@ -168,7 +168,7 @@ POST /search
 | return_date      | Return date         |
 | airline          | Filter by airline   |
 | price            | Price               |
-| duration         | Duration            |
+| duration         | Flight Duration     |
 | stops            | Number of stops     |
 
 
