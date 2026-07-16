@@ -74,53 +74,44 @@ book-cabin/
 
 ---
 
-# Architecture
+# System Architecture
 
-```
-HTTP Request
-      │
-      ▼
-API Rate Limiter
-      │
-      ▼
-Search Handler
-      │
-      ▼
-Request Validation
-      │
-      ▼
-Search Service
-      │
-      ├── Cache Lookup
-      │
-      ▼
-Aggregator
-      │
-      ├── Garuda Provider
-      ├── Lion Provider
-      ├── AirAsia Provider
-      └── Batik Provider
-               │
-               ▼
-      Provider Rate Limiter
-               │
-               ▼
- Retry with Exponential Backoff
-               │
-               ▼
-     Provider JSON Data
-               │
-               ▼
-          DTO → Mapper
-               │
-               ▼
-     RFC3339 / Unix Timestamp
-               │
-               ▼
-     Unified Flight Model
-               │
-               ▼
-      Filter → Sort → Flight Comparison Engine → Response
+```mermaid
+flowchart TD
+
+    Client --> RateLimiter
+
+    RateLimiter --> SearchHandler
+
+    SearchHandler --> Validation
+
+    Validation --> SearchService
+
+    SearchService --> Cache
+
+    SearchService --> Aggregator
+
+    Aggregator --> ProviderLimiter
+
+    ProviderLimiter --> Garuda
+    ProviderLimiter --> Lion
+    ProviderLimiter --> AirAsia
+    ProviderLimiter --> Batik
+
+    Garuda --> Mapper
+    Lion --> Mapper
+    AirAsia --> Mapper
+    Batik --> Mapper
+
+    Mapper --> UnifiedModel
+
+    UnifiedModel --> ComparisonEngine
+
+    ComparisonEngine --> Filter
+
+    Filter --> Sort
+
+    Sort --> Response
 ```
 Flight schedules are normalized into RFC3339 timestamps
 with timezone offsets preserved. Unix timestamps are used
@@ -554,8 +545,6 @@ Best Price: Rp1,300,000
 
 Potential Savings: Rp200,000
 
-
-Example API Response:
 ```json
  "comparisons": [
         {
