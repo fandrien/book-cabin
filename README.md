@@ -12,6 +12,7 @@ A Go-based flight search aggregator that collects flight data concurrently from 
 * In-memory cache
 * Filtering
 * Sorting
+* Timezone Handling
 * Best Value ranking algorithm
 * Request validation
 * Partial failure handling
@@ -53,12 +54,14 @@ book-cabin/
 ├── dto/
 ├── external/
 ├── handler/
+├── helper/
 ├── loader/
 ├── mapper/
 ├── model/
 ├── provider/
 ├── response/
 ├── router/
+    └── middleware/
 ├── service/
 ├── util/
 ├── validator/
@@ -103,11 +106,24 @@ Aggregator
  Retry with Exponential Backoff
                │
                ▼
+     Provider JSON Data
+               │
+               ▼
+          DTO → Mapper
+               │
+               ▼
+     RFC3339 / Unix Timestamp
+               │
+               ▼
      Unified Flight Model
                │
                ▼
       Filter → Sort → Response
 ```
+Flight schedules are normalized into RFC3339 timestamps
+with timezone offsets preserved. Unix timestamps are used
+for accurate comparison and sorting across different
+Indonesian timezones (WIB, WITA, WIT).
 
 ---
 
@@ -209,6 +225,24 @@ Supported order
 
 * asc
 * desc
+
+---
+
+# Timezone Handling
+
+All provider schedules are normalized into RFC3339 format.
+
+The system preserves timezone offsets and stores Unix timestamps
+for accurate duration calculations, sorting, and comparison across
+different regions (WIB, WITA, WIT).
+
+Example:
+
+2025-12-15T08:00:00+07:00  (WIB)
+2025-12-15T11:00:00+08:00  (WITA)
+
+Timezone-aware calculations ensure correct flight ordering and
+travel duration regardless of local airport timezone.
 
 ---
 
