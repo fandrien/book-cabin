@@ -7,7 +7,7 @@ func matchStops(
 	flight model.Flight,
 ) bool {
 
-	if req.Stop != nil && flight.Stops != *req.Stop {
+	if req.Stops != nil && flight.Stops != *req.Stops {
 		return false
 	}
 

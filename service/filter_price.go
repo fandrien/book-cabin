@@ -2,13 +2,18 @@ package service
 
 import "github.com/fandrien/book-cabin/model"
 
-func matchPrice(
+func rangePrice(
 	req model.SearchRequest,
-	f model.Flight,
+	flight model.Flight,
 ) bool {
 
-	if req.Price != nil &&
-		f.Price.Amount != *req.Price {
+	if req.MinPrice != nil &&
+		flight.Price.Amount < *req.MinPrice {
+		return false
+	}
+
+	if req.MaxPrice != nil &&
+		flight.Price.Amount > *req.MaxPrice {
 		return false
 	}
 

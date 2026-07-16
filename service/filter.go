@@ -16,7 +16,7 @@ func filterFlights(
 			continue
 		}
 
-		if !matchPrice(req, flight) {
+		if !rangePrice(req, flight) {
 			continue
 		}
 
@@ -32,11 +32,11 @@ func filterFlights(
 			continue
 		}
 
-		if !matchDuration(req, flight) {
+		if !rangeDuration(req, flight) {
 			continue
 		}
 
-		if !matchAirline(req, flight) {
+		if !matchAirlines(req, flight) {
 			continue
 		}
 
