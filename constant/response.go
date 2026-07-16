@@ -1,8 +1,8 @@
 package constant
 
 const (
-	// General
-	ErrInternalServer    = "INTERNAL_SERVER_ERROR"
+	SuccessCode          = "SUCCESS"
 	ErrInvalidRequest    = "INVALID_REQUEST"
+	ErrInternalServer    = "INTERNAL_SERVER_ERROR"
 	ErrRateLimitExceeded = "RATE_LIMIT_EXCEEDED"
 )

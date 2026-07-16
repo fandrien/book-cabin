@@ -70,10 +70,10 @@ func (h *SearchHandler) Search(
 		return
 	}
 
-	w.Header().Set(
-		"Content-Type",
-		"application/json",
+	response.WriteSuccess(
+		w,
+		http.StatusOK,
+		"Flights retrieved successfully",
+		flights,
 	)
-
-	json.NewEncoder(w).Encode(flights)
 }

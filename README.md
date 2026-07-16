@@ -189,6 +189,8 @@ POST /search
 ### Response
 ```json
 {
+    "code": "SUCCESS",
+    "message": "Flights retrieved successfully",
     "total_flights": 2,
     "search_time_ms": 263,
     "provider_logs": [
@@ -297,6 +299,33 @@ POST /search
     ]
 }
 ```
+
+---
+
+## Standard API Response
+
+### Success Response
+
+```json
+{
+  "code": "SUCCESS",
+  "message": "Flights retrieved successfully",
+  "data": {
+    ...
+  }
+}
+```
+
+### Error Response
+
+```json
+{
+  "code": "INVALID_REQUEST",
+  "message": "origin is required"
+}
+```
+
+The API uses a consistent response contract across successful and failed requests.
 
 ---
 
