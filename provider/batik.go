@@ -5,6 +5,7 @@ import (
 
 	"github.com/fandrien/book-cabin/constant"
 	"github.com/fandrien/book-cabin/dto"
+	"github.com/fandrien/book-cabin/helper"
 	"github.com/fandrien/book-cabin/loader"
 	"github.com/fandrien/book-cabin/mapper"
 	"github.com/fandrien/book-cabin/model"
@@ -22,24 +23,55 @@ func (g *BatikProvider) Name() string {
 
 func (g *BatikProvider) Search(
 	ctx context.Context,
-	req model.SearchRequest,
 ) ([]model.Flight, error) {
 
-	if err := BatikLimiter.Wait(ctx); err != nil {
-		return nil, err
-	}
+	var flights []model.Flight
 
-	//Batik delay 200-400ms
-	if err := loader.RandomDelay(ctx, 200, 400); err != nil {
-		return nil, err
-	}
+	// Retry with exponential backoff
+	err := helper.Retry(
+		ctx,
+		3,
+		func() error {
 
-	//Read Source Data (JSON file)
-	resp, err := loader.LoadJSON[dto.BatikResponse](constant.BatikDataPath)
+			result, err := g.search(ctx)
+			if err != nil {
+				return err
+			}
+
+			flights = result
+			return nil
+		},
+	)
+
 	if err != nil {
 		return nil, err
 	}
 
-	//Normalize Data
+	return flights, nil
+}
+
+func (g *BatikProvider) search(
+	ctx context.Context,
+) ([]model.Flight, error) {
+
+	// Set Limiter
+	if err := BatikLimiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
+	// Batik delay 200-400ms
+	if err := loader.RandomDelay(ctx, 200, 400); err != nil {
+		return nil, err
+	}
+
+	// Read Source Data (JSON file)
+	resp, err := loader.LoadJSON[dto.BatikResponse](
+		constant.BatikDataPath,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	// Normalize Data
 	return mapper.MapBatik(resp)
 }

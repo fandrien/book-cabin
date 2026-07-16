@@ -50,10 +50,7 @@ func (a *Aggregator) Aggregate(
 
 			start := time.Now()
 
-			flights, err := provider.Search(
-				providerCtx,
-				req,
-			)
+			flights, err := provider.Search(providerCtx)
 
 			stat := model.ProviderResult{
 				Name:       provider.Name(),

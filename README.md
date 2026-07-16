@@ -17,7 +17,9 @@ A Go-based flight search aggregator that collects flight data concurrently from 
 * Partial failure handling
 * Context propagation
 * Provider timeout
+* API rate limiting
 * Provider rate limiting
+* Retry with exponential backoff
 
 ---
 
@@ -70,33 +72,41 @@ book-cabin/
 # Architecture
 
 ```
-                HTTP Request
-                     │
-                     ▼
-                Search Handler
-                     │
-                     ▼
-             Request Validation
-                     │
-                     ▼
-              Search Service
-                     │
-          ┌──────────┴──────────┐
-          │                     │
-          ▼                     ▼
-      Cache Lookup         Aggregator
-                                  │
-          ┌───────────────────────┼──────────────────────┐
-          ▼                       ▼                      ▼
-      Garuda Provider      Lion Provider       AirAsia Provider
-                                  │
-                             Batik Provider
-                                  │
-                                  ▼
-                          Unified Flight Model
-                                  │
-                                  ▼
-                     Filtering → Sorting → Response
+HTTP Request
+      │
+      ▼
+API Rate Limiter
+      │
+      ▼
+Search Handler
+      │
+      ▼
+Request Validation
+      │
+      ▼
+Search Service
+      │
+      ├── Cache Lookup
+      │
+      ▼
+Aggregator
+      │
+      ├── Garuda Provider
+      ├── Lion Provider
+      ├── AirAsia Provider
+      └── Batik Provider
+               │
+               ▼
+      Provider Rate Limiter
+               │
+               ▼
+ Retry with Exponential Backoff
+               │
+               ▼
+     Unified Flight Model
+               │
+               ▼
+      Filter → Sort → Response
 ```
 
 ---
@@ -264,6 +274,30 @@ The API still returns available flights from successful providers.
 
 ---
 
+# Retry with Exponential Backoff
+
+Provider requests are retried automatically when transient
+failures occur.
+
+Retry strategy:
+
+Attempt 1 -> immediate
+
+Attempt 2 -> wait 100ms
+
+Attempt 3 -> wait 200ms
+
+Attempt 4 -> wait 400ms
+
+Benefits:
+
+* Improves resilience
+* Handles temporary provider failures
+* Reduces failed searches caused by short outages
+* Prevents aggressive retry storms
+
+---
+
 # Validation
 
 The following validations are performed:
@@ -291,15 +325,46 @@ This reduces overall search latency.
 
 # Provider Rate Limiting
 
-To prevent overwhelming external provider APIs and to respect
-third-party quotas, each provider is protected by its own
-token-bucket rate limiter.
+Each airline provider is protected by its own
+rate limiter.
 
-Example:
-- Garuda: 5 requests/second
-- Lion Air: 5 requests/second
-- AirAsia: 5 requests/second
-- Batik Air: 5 requests/second
+This prevents overwhelming external providers
+and simulates real-world third-party API quotas.
+
+Example configuration:
+
+* Garuda: 5 requests/sec
+* Lion Air: 5 requests/sec
+* AirAsia: 5 requests/sec
+* Batik Air: 5 requests/sec
+
+Benefits:
+
+* Protects external APIs
+* Prevents exceeding external provider rate limits
+* Improves system stability
+* Supports fair resource usage
+
+---
+
+# API Rate Limiting
+
+The API is protected by a global token-bucket rate limiter.
+
+Purpose:
+
+* Protect the service from abuse
+* Prevent excessive request spikes
+* Improve overall system stability
+
+When the limit is exceeded:
+
+HTTP 429 Too Many Requests
+
+{
+  "code": "RATE_LIMIT_EXCEEDED",
+  "message": "rate limit exceeded"
+}
 
 ---
 
@@ -307,10 +372,13 @@ Example:
 
 * Go
 * net/http
+* Chi Router
 * Context
 * Goroutines
 * WaitGroup
 * Mutex
+* Rate Limiting
+* Exponential Backoff
 * JSON
 * Generic Functions
 

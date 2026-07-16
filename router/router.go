@@ -4,6 +4,7 @@ import (
 	"github.com/go-chi/chi/v5"
 
 	"github.com/fandrien/book-cabin/handler"
+	"github.com/fandrien/book-cabin/router/middleware"
 )
 
 func NewRouter(
@@ -11,6 +12,8 @@ func NewRouter(
 ) *chi.Mux {
 
 	r := chi.NewRouter()
+
+	r.Use(middleware.RateLimit)
 
 	r.Post(
 		"/search",

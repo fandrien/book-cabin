@@ -8,9 +8,5 @@ import (
 
 type Provider interface {
 	Name() string
-
-	Search(
-		ctx context.Context,
-		req model.SearchRequest,
-	) ([]model.Flight, error)
+	Search(ctx context.Context) ([]model.Flight, error)
 }

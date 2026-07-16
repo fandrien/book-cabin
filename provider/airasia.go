@@ -7,6 +7,7 @@ import (
 
 	"github.com/fandrien/book-cabin/constant"
 	"github.com/fandrien/book-cabin/dto"
+	"github.com/fandrien/book-cabin/helper"
 	"github.com/fandrien/book-cabin/loader"
 	"github.com/fandrien/book-cabin/mapper"
 	"github.com/fandrien/book-cabin/model"
@@ -24,14 +25,43 @@ func (g *AirAsiaProvider) Name() string {
 
 func (g *AirAsiaProvider) Search(
 	ctx context.Context,
-	req model.SearchRequest,
 ) ([]model.Flight, error) {
 
+	var flights []model.Flight
+
+	// Retry with exponential backoff
+	err := helper.Retry(
+		ctx,
+		3,
+		func() error {
+
+			result, err := g.search(ctx)
+			if err != nil {
+				return err
+			}
+
+			flights = result
+			return nil
+		},
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return flights, nil
+}
+
+func (g *AirAsiaProvider) search(
+	ctx context.Context,
+) ([]model.Flight, error) {
+
+	// Set Limiter
 	if err := AirAsiaLimiter.Wait(ctx); err != nil {
 		return nil, err
 	}
 
-	//AirAsia delay 50-150ms & occasionaly fails
+	// AirAsia delay 50-150ms
 	if err := loader.RandomDelay(ctx, 50, 150); err != nil {
 		return nil, err
 	}
@@ -41,12 +71,12 @@ func (g *AirAsiaProvider) Search(
 		return nil, errors.New("airasia provider unavailable")
 	}
 
-	//Read Source Data (JSON file)
-	resp, err := loader.LoadJSON[dto.AirAsiaResponse](constant.AirAsiaDataPath)
+	resp, err := loader.LoadJSON[dto.AirAsiaResponse](
+		constant.AirAsiaDataPath,
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	//Normalize Data
 	return mapper.MapAirAsia(resp)
 }
