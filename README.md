@@ -192,6 +192,7 @@ POST /search
 }
 ```
 
+Response:
 ```json
 {
     "total_flights": 2,
@@ -553,7 +554,8 @@ Best Price: Rp1,300,000
 
 Potential Savings: Rp200,000
 
-Example Response
+
+Example API Response:
 ```json
  "comparisons": [
         {
