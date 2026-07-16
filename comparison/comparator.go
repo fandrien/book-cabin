@@ -14,8 +14,8 @@ func BuildComparisons(flights []model.Flight) []model.FlightComparison {
 
 		key := fmt.Sprintf(
 			"%s|%s|%d|%d|%s",
-			f.Departure.City,
-			f.Arrival.City,
+			f.Departure.Airport,
+			f.Arrival.Airport,
 			f.Departure.Timestamp,
 			f.Arrival.Timestamp,
 			f.Airline,

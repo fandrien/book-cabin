@@ -21,6 +21,7 @@ A Go-based flight search aggregator that collects flight data concurrently from 
 * API rate limiting
 * Provider rate limiting
 * Retry with exponential backoff
+* Flight Comparison Engine
 
 ---
 
@@ -551,6 +552,42 @@ Result:
 Best Price: Rp1,300,000
 
 Potential Savings: Rp200,000
+
+Example Response
+```json
+ "comparisons": [
+        {
+            "key": "CGK|DPS|1765790400|1765804200|{Lion Air JT}",
+            "best_price": 500000,
+            "savings": 280000,
+            "offers": [
+                {
+                    "provider": "Lion Air",
+                    "price": 780000
+                },
+                {
+                    "provider": "Lion Air",
+                    "price": 500000
+                }
+            ]
+        },
+        {
+            "key": "CGK|DPS|1765786500|1765802100|{AirAsia QZ}",
+            "best_price": 400000,
+            "savings": 85000,
+            "offers": [
+                {
+                    "provider": "AirAsia",
+                    "price": 485000
+                },
+                {
+                    "provider": "AirAsia",
+                    "price": 400000
+                }
+            ]
+        }
+    ]
+```
 
 ---
 
