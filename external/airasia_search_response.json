@@ -78,9 +78,9 @@
           "wait_time_minutes": 95
         }
       ],
-      "price_idr": 400000,
+      "price_idr": 700000,
       "seats": 88,
-      "cabin_class": "economy",
+      "cabin_class": "business",
       "baggage_note": "Cabin baggage only, checked bags additional fee"
     }
   ]

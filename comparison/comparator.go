@@ -50,8 +50,10 @@ func BuildComparisons(flights []model.Flight) []model.FlightComparison {
 			}
 
 			offers = append(offers, model.Offer{
-				Provider: f.Provider,
-				Price:    price,
+				FlightNumber: f.FlightNumber,
+				CabinClass:   f.CabinClass,
+				Provider:     f.Provider,
+				Price:        price,
 			})
 		}
 

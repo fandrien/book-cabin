@@ -581,45 +581,45 @@ Potential Savings: Rp200,000
 
 ```json
  "comparisons": [
-        {
-            "key": "CGK|DPS|1765790400|1765804200|{Lion Air JT}",
-            "best_price": 500000,
-            "savings": 280000,
-            "offers": [
-                {
-                    "flight_id": "JT605",
-                    "class": "business",
-                    "provider": "Lion Air",
-                    "price": 780000
-                },
-                {
-                    "flight_id": "JT606",
-                    "class": "economy",
-                    "provider": "Lion Air",
-                    "price": 500000
-                }
-            ]
-        },
-        {
-            "key": "CGK|DPS|1765786500|1765802100|{AirAsia QZ}",
-            "best_price": 400000,
-            "savings": 85000,
-            "offers": [
-                {
-                    "flight_id": "QZ605",
-                    "class": "business",
-                    "provider": "AirAsia",
-                    "price": 485000
-                },
-                {
-                    "flight_id": "QZ606",
-                    "class": "economy",
-                    "provider": "AirAsia",
-                    "price": 400000
-                }
-            ]
-        }
-    ]
+            {
+                "key": "CGK|DPS|1765786500|1765802100|{AirAsia QZ}",
+                "best_price": 485000,
+                "savings": 215000,
+                "offers": [
+                    {
+                        "flight_number": "QZ7250",
+                        "cabin_class": "economy",
+                        "provider": "AirAsia",
+                        "price": 485000
+                    },
+                    {
+                        "flight_number": "QZ7666",
+                        "cabin_class": "business",
+                        "provider": "AirAsia",
+                        "price": 700000
+                    }
+                ]
+            },
+            {
+                "key": "CGK|DPS|1765790400|1765804200|{Lion Air JT}",
+                "best_price": 780000,
+                "savings": 120000,
+                "offers": [
+                    {
+                        "flight_number": "JT650",
+                        "cabin_class": "ECONOMY",
+                        "provider": "Lion Air",
+                        "price": 780000
+                    },
+                    {
+                        "flight_number": "JT666",
+                        "cabin_class": "BUSINESS",
+                        "provider": "Lion Air",
+                        "price": 900000
+                    }
+                ]
+            }
+        ]
 ```
 
 ---

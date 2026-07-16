@@ -1,8 +1,10 @@
 package model
 
 type Offer struct {
-	Provider string `json:"provider"`
-	Price    int    `json:"price"`
+	FlightNumber string `json:"flight_number"`
+	CabinClass   string `json:"cabin_class"`
+	Provider     string `json:"provider"`
+	Price        int    `json:"price"`
 }
 
 type FlightComparison struct {

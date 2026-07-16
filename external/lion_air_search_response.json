@@ -169,9 +169,9 @@
           }
         ],
         "pricing": {
-          "total": 500000,
+          "total": 900000,
           "currency": "IDR",
-          "fare_type": "ECONOMY"
+          "fare_type": "BUSINESS"
         },
         "seats_left": 52,
         "plane_type": "Boeing 737-800",
