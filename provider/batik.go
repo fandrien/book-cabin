@@ -25,6 +25,10 @@ func (g *BatikProvider) Search(
 	req model.SearchRequest,
 ) ([]model.Flight, error) {
 
+	if err := BatikLimiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
 	//Batik delay 200-400ms
 	if err := loader.RandomDelay(ctx, 200, 400); err != nil {
 		return nil, err

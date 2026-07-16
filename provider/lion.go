@@ -25,6 +25,10 @@ func (l *LionProvider) Search(
 	req model.SearchRequest,
 ) ([]model.Flight, error) {
 
+	if err := LionLimiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
 	//Lion Air delay 100-200ms
 	if err := loader.RandomDelay(ctx, 100, 200); err != nil {
 		return nil, err

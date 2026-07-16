@@ -17,6 +17,7 @@ A Go-based flight search aggregator that collects flight data concurrently from 
 * Partial failure handling
 * Context propagation
 * Provider timeout
+* Provider rate limiting
 
 ---
 
@@ -285,6 +286,20 @@ Provider searches run concurrently using:
 * sync.Mutex
 
 This reduces overall search latency.
+
+---
+
+# Provider Rate Limiting
+
+To prevent overwhelming external provider APIs and to respect
+third-party quotas, each provider is protected by its own
+token-bucket rate limiter.
+
+Example:
+- Garuda: 5 requests/second
+- Lion Air: 5 requests/second
+- AirAsia: 5 requests/second
+- Batik Air: 5 requests/second
 
 ---
 

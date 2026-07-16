@@ -27,6 +27,10 @@ func (g *AirAsiaProvider) Search(
 	req model.SearchRequest,
 ) ([]model.Flight, error) {
 
+	if err := AirAsiaLimiter.Wait(ctx); err != nil {
+		return nil, err
+	}
+
 	//AirAsia delay 50-150ms & occasionaly fails
 	if err := loader.RandomDelay(ctx, 50, 150); err != nil {
 		return nil, err
