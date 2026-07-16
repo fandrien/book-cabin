@@ -192,7 +192,7 @@ POST /search
 }
 ```
 
-Response:
+### Response
 ```json
 {
     "total_flights": 2,
