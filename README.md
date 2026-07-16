@@ -50,6 +50,7 @@ book-cabin/
 │
 ├── aggregation/
 ├── cache/
+├── comparison/
 ├── constant/
 ├── dto/
 ├── external/
@@ -118,7 +119,7 @@ Aggregator
      Unified Flight Model
                │
                ▼
-      Filter → Sort → Response
+      Filter → Sort → Flight Comparison Engine → Response
 ```
 Flight schedules are normalized into RFC3339 timestamps
 with timezone offsets preserved. Unix timestamps are used
@@ -187,6 +188,117 @@ POST /search
   "maxPrice": 1000000,
   "sort_by": "best",
   "sort_order": "asc"
+}
+```
+
+```json
+{
+    "total_flights": 2,
+    "search_time_ms": 263,
+    "provider_logs": [
+        {
+            "name": "AirAsia",
+            "success": true,
+            "flight_count": 4,
+            "duration_ms": 112
+        },
+        {
+            "name": "Garuda Indonesia",
+            "success": true,
+            "flight_count": 3,
+            "duration_ms": 146
+        },
+        {
+            "name": "Lion Air",
+            "success": true,
+            "flight_count": 3,
+            "duration_ms": 208
+        },
+        {
+            "name": "Batik Air",
+            "success": true,
+            "flight_count": 3,
+            "duration_ms": 262
+        }
+    ],
+    "flights": [
+        {
+            "id": "JT650_Lion_Air",
+            "provider": "Lion Air",
+            "airline": {
+                "name": "Lion Air",
+                "code": "JT"
+            },
+            "flight_number": "JT650",
+            "departure": {
+                "airport": "CGK",
+                "city": "Jakarta",
+                "datetime": "2025-12-15T16:20:00+07:00",
+                "timestamp": 1765790400
+            },
+            "arrival": {
+                "airport": "DPS",
+                "city": "Denpasar",
+                "datetime": "2025-12-15T21:10:00+08:00",
+                "timestamp": 1765804200
+            },
+            "duration": {
+                "total_minutes": 305,
+                "formatted": "3h 50m"
+            },
+            "stops": 1,
+            "price": {
+                "amount": 780000,
+                "currency": "IDR"
+            },
+            "available_seats": 52,
+            "cabin_class": "ECONOMY",
+            "aircraft": "Boeing 737-800",
+            "amenities": [],
+            "baggage": {
+                "carry_on": "7 kg",
+                "checked": "20 kg"
+            }
+        },
+        {
+            "id": "QZ7250_AirAsia",
+            "provider": "AirAsia",
+            "airline": {
+                "name": "AirAsia",
+                "code": "QZ"
+            },
+            "flight_number": "QZ7250",
+            "departure": {
+                "airport": "CGK",
+                "city": "",
+                "datetime": "2025-12-15T15:15:00+07:00",
+                "timestamp": 1765786500
+            },
+            "arrival": {
+                "airport": "DPS",
+                "city": "",
+                "datetime": "2025-12-15T20:35:00+08:00",
+                "timestamp": 1765802100
+            },
+            "duration": {
+                "total_minutes": 354,
+                "formatted": "5h 54m"
+            },
+            "stops": 1,
+            "price": {
+                "amount": 485000,
+                "currency": "IDR"
+            },
+            "available_seats": 88,
+            "cabin_class": "economy",
+            "aircraft": null,
+            "amenities": null,
+            "baggage": {
+                "carry_on": "Cabin Baggage Only",
+                "checked": "Additional fee"
+            }
+        }
+    ]
 }
 ```
 
@@ -399,6 +511,46 @@ HTTP 429 Too Many Requests
   "code": "RATE_LIMIT_EXCEEDED",
   "message": "rate limit exceeded"
 }
+
+---
+
+# Flight Price Comparison
+
+The system can compare prices across providers for the same flight.
+
+Flights are grouped using:
+
+* Airline
+* Origin airport
+* Destination airport
+* Departure timestamp
+* Arrival timestamp
+
+When multiple providers offer the same flight, the system:
+
+* Identifies the cheapest available offer
+* Calculates potential savings
+* Returns all available provider offers
+
+Example:
+
+Flight:
+CGK → DPS
+08:00 → 11:00
+
+Offers:
+
+Provider A: Rp1,500,000
+
+Provider B: Rp1,300,000
+
+Provider C: Rp1,450,000
+
+Result:
+
+Best Price: Rp1,300,000
+
+Potential Savings: Rp200,000
 
 ---
 

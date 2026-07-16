@@ -19,8 +19,9 @@ type SearchRequest struct {
 }
 
 type SearchResponse struct {
-	Total        int              `json:"total"`
-	SearchTimeMs int64            `json:"search_time_ms"`
-	Providers    []ProviderResult `json:"providers"`
-	Flights      []Flight         `json:"flights"`
+	TotalFlights int                `json:"total_flights"`
+	SearchTimeMs int64              `json:"search_time_ms"`
+	ProviderLogs []ProviderResult   `json:"provider_logs"`
+	Flights      []Flight           `json:"flights"`
+	Comparisons  []FlightComparison `json:"comparisons,omitempty"`
 }

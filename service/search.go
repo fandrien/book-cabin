@@ -6,6 +6,7 @@ import (
 
 	"github.com/fandrien/book-cabin/aggregation"
 	"github.com/fandrien/book-cabin/cache"
+	"github.com/fandrien/book-cabin/comparison"
 	"github.com/fandrien/book-cabin/model"
 )
 
@@ -52,16 +53,19 @@ func (s *SearchService) Search(
 		req,
 		flights,
 	)
+	comparisons := comparison.BuildComparisons(flights)
 
 	response := &model.SearchResponse{
 
-		Total: len(flights),
+		TotalFlights: len(flights),
 
-		Providers: result.Providers,
+		ProviderLogs: result.Providers,
 
 		SearchTimeMs: time.Since(start).Milliseconds(),
 
 		Flights: flights,
+
+		Comparisons: comparisons,
 	}
 
 	s.cache.Set(cacheKey, response)
