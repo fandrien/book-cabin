@@ -79,39 +79,42 @@ book-cabin/
 ```mermaid
 flowchart TD
 
-    Client --> RateLimiter
+    A[HTTP Request]
+        --> B[API Rate Limiter]
+        --> C[Search Handler]
+        --> D[Request Validation]
+        --> E[Search Service]
 
-    RateLimiter --> SearchHandler
+    E --> F[Cache Lookup]
+    E --> G[Aggregator]
 
-    SearchHandler --> Validation
+    G --> H[Garuda Provider]
+    G --> I[Lion Provider]
+    G --> J[AirAsia Provider]
+    G --> K[Batik Provider]
 
-    Validation --> SearchService
+    subgraph Parallel Provider Execution
+        H
+        I
+        J
+        K
+    end
 
-    SearchService --> Cache
+    H --> L[Provider Rate Limiter]
+    I --> L
+    J --> L
+    K --> L
 
-    SearchService --> Aggregator
+    L --> M[Retry with Exponential Backoff]
+    M --> N[Provider JSON Data]
+    N --> O[DTO to Mapper]
+    O --> P[RFC3339 / Unix Timestamp]
+    P --> Q[Unified Flight Model]
 
-    Aggregator --> ProviderLimiter
-
-    ProviderLimiter --> Garuda
-    ProviderLimiter --> Lion
-    ProviderLimiter --> AirAsia
-    ProviderLimiter --> Batik
-
-    Garuda --> Mapper
-    Lion --> Mapper
-    AirAsia --> Mapper
-    Batik --> Mapper
-
-    Mapper --> UnifiedModel
-
-    UnifiedModel --> ComparisonEngine
-
-    ComparisonEngine --> Filter
-
-    Filter --> Sort
-
-    Sort --> Response
+    Q --> R[Filter]
+    R --> S[Sort]
+    S --> T[Flight Comparison Engine]
+    T --> U[Response]
 ```
 Flight schedules are normalized into RFC3339 timestamps
 with timezone offsets preserved. Unix timestamps are used
