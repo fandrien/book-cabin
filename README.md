@@ -587,10 +587,14 @@ Potential Savings: Rp200,000
             "savings": 280000,
             "offers": [
                 {
+                    "flight_id": "JT605",
+                    "class": "business",
                     "provider": "Lion Air",
                     "price": 780000
                 },
                 {
+                    "flight_id": "JT606",
+                    "class": "economy",
                     "provider": "Lion Air",
                     "price": 500000
                 }
@@ -602,10 +606,14 @@ Potential Savings: Rp200,000
             "savings": 85000,
             "offers": [
                 {
+                    "flight_id": "QZ605",
+                    "class": "business",
                     "provider": "AirAsia",
                     "price": 485000
                 },
                 {
+                    "flight_id": "QZ606",
+                    "class": "economy",
                     "provider": "AirAsia",
                     "price": 400000
                 }
