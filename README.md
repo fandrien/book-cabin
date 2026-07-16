@@ -150,7 +150,14 @@ POST /search
   "origin": "CGK",
   "destination": "DPS",
   "departureDate": "2025-12-15",
-  "returnDate": "2025-12-18",
+  "returnDate": "",
+  "arrivalDate": "2025-12-15",
+  "airlines": ["AirAsia", "Lion Air"],
+  "stops": 1,
+  "minDuration": 60,
+  "maxDuration": 500,
+  "minPrice": 100000,
+  "maxPrice": 1000000,
   "sort_by": "best",
   "sort_order": "asc"
 }
@@ -164,11 +171,14 @@ POST /search
 | ---------------- | ------------------- |
 | origin           | Origin airport      |
 | destination      | Destination airport |
-| departureDate   | Departure date      |
-| returnDate      | Return date         |
-| airline          | Filter by airline   |
-| price            | Price               |
-| duration         | Flight Duration     |
+| departureDate    | Departure date      |
+| arrivalDate      | Arrival date        |
+| returnDate       | Return date         |
+| airlines         | Filter by airlines  |
+| minPrice         | Min Price           |
+| maxPrice         | Max Price           |
+| minDuration      | Min Flight Duration |
+| maxDuration      | Max Flight Duration |
 | stops            | Number of stops     |
 
 
