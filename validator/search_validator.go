@@ -38,9 +38,8 @@ func ValidateSearchRequest(req model.SearchRequest) error {
 
 		}
 
-		if !departureDate.Before(returnDate) {
-			return errors.New("departure date must be before return date")
-
+		if departureDate.After(returnDate) {
+			return errors.New("return date cannot be before departure date")
 		}
 	}
 
@@ -51,8 +50,7 @@ func ValidateSearchRequest(req model.SearchRequest) error {
 		}
 
 		if departureDate.After(arrivalDate) {
-			return errors.New("departure date must be before return date")
-
+			return errors.New("arrival date cannot be before departure date")
 		}
 	}
 
