@@ -1,6 +1,6 @@
 # Book Cabin
 
-A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, ing, and caching.
+A Go-based flight search aggregator that collects flight data concurrently from multiple airline providers, normalizes the responses into a unified model, and returns the best available results with filtering, sorting and caching.
 
 ## Features
 
@@ -124,7 +124,7 @@ go mod tidy
 Run the application
 
 ```bash
-go run .
+go run ./api
 ```
 
 Server will start on
@@ -149,7 +149,7 @@ POST /search
 {
   "origin": "CGK",
   "destination": "DPS",
-  "departure_date": "2025-12-15",
+  "departureDate": "2025-12-15",
   "returnDate": "2025-12-18",
   "sort_by": "best",
   "sort_order": "asc"
@@ -164,19 +164,19 @@ POST /search
 | ---------------- | ------------------- |
 | origin           | Origin airport      |
 | destination      | Destination airport |
-| departure_date   | Departure date      |
-| return_date      | Return date         |
+| departureDate   | Departure date      |
+| returnDate      | Return date         |
 | airline          | Filter by airline   |
 | price            | Price               |
-| duration         | Duration            |
+| duration         | Flight Duration     |
 | stops            | Number of stops     |
 
 
 ---
 
-# ing
+# Sorting
 
-Supported ing fields
+Supported sorting fields
 
 * best (default)
 * price
@@ -191,17 +191,19 @@ Supported order
 
 ---
 
-# Best Value Algorithm
+## Best Value Algorithm
 
-If no ing option is specified, flights are ranked using a custom Best Value algorithm.
+If no sorting option is specified, flights are ranked using a custom Best Value algorithm.
 
-The score considers:
+The score combines:
 
-* Direct flights are preferred
-* Lower ticket prices
-* Shorter total travel duration (including layovers)
+- Ticket price (lower is better)
+- Total travel duration (shorter is better)
+- Number of stops (fewer stops are strongly preferred)
 
-This provides a balance between affordability and convenience.
+Flights with fewer stops receive a significant advantage, making direct flights rank higher whenever possible.
+
+The flight with the lowest score is considered the best value.
 
 ---
 
