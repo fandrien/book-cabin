@@ -38,6 +38,8 @@ Each provider has:
 * Mapper
 * Provider implementation
 * Mock JSON response
+* Provider Rate Limiter
+* Retry with Exponential Backoff
 
 ---
 
